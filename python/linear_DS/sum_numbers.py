@@ -146,3 +146,132 @@ def get_each_vowel_count(sentence: str) -> {str: int}:
 
 print(get_vowels_count('today is a beautiful day'))
 print(get_each_vowel_count('today is a beautiful day'))
+
+
+# 10._ Create a function so that it returns the sum of all the multiples of 3 or 5 below the number passed in.
+# Additionally, if the number is negative, return 0
+
+def solution(number):
+    return sum(x for x in range(number) if x % 3 == 0 or x % 5 == 0)
+
+
+# 11._ Given an array of integers, find the one that appears an odd number of times.
+
+# simple but inefficient: word case is near O(n*n)
+def find_odd_v1(seq):
+    uniques = set(seq)
+    for num in uniques:
+        repetitions = sum(1 for k in seq if k == num)
+        if repetitions % 2 == 1:
+            return num
+
+
+# more efficient but use more space: time O(nlogn) , space O(n)
+def find_odd_v2(seq):
+    numbers = [k for k in seq]
+    numbers.sort()
+
+    value = numbers[0]
+    count = 1
+    for k in range(1, len(numbers)):
+        if numbers[k] == value:
+            count += 1
+        else:
+            if count % 2 != 0:
+                return value
+            else:
+                value = numbers[k]
+                count += 1
+
+    return value if count % 2 != 0 else None
+
+
+# the lowest time complexity but more space consume: time is O(n) , space is O(n)
+
+def find_odd_v3(seq):
+    counts = {}
+    for num in seq:  # O(n)
+        if num in counts:
+            counts[num] += 1
+        else:
+            counts[num] = 1
+
+    for key in counts:  # O(b) where b is the number of unique elements in the sequence, so b < n
+        if counts[key] % 2 != 0:
+            return key
+
+    return None  # time O(n + b) -> O(n) since b < n always
+
+
+# 12 .Digital root is the recursive sum of all the digits in a number.
+# Given n, take the sum of the digits of n. If that value has more than one digit, continue reducing in this way until
+# a single-digit number is produced. The input will be a non-negative integer.
+
+def digital_root(n):
+    digits = []
+    while n > 0:
+        digits.append(n % 10)
+        n = n // 10
+    value = sum(digits)
+    return value if value < 10 else digital_root(value)
+
+
+# 13._ Your goal in this kata is to implement a difference function, which subtracts one list from another and returns
+# the result. It should remove all values from list a, which are present in list b keeping their order.
+
+def array_diff(a, b):
+    return [x for x in a if x not in b]
+
+
+# 14 ._ Write a function, persistence, that takes in a positive parameter num and returns its multiplicative persistence,
+# which is the number of times you must multiply the digits in num until you reach a single digit. Example
+
+# 39 --> 3 (because 3*9 = 27, 2*7 = 14, 1*4 = 4 and 4 has only one digit)
+# 999 --> 4 (because 9*9*9 = 729, 7*2*9 = 126, 1*2*6 = 12, and finally 1*2 = 2)
+
+def persistence(n, count=0):
+    if n < 10:
+        return count
+
+    digits = [int(k) for k in str(n)]
+    result = digits[0]
+    for k in range(1, len(digits)):
+        result = result * digits[k]
+    return persistence(result, count + 1)
+
+
+print(ord('b') - ord('a'))
+
+
+# 15 ._ You are going to be given an array of integers. Your job is to take that array and find an index N where the
+# sum of the integers to the left of N is equal to the sum of the integers to the right of N. If there is no index
+# that would make this happen, return -1.
+
+def find_even_index(arr):
+    for k in range(len(arr)):
+        if sum(arr[x] for x in range(0, k)) == sum(arr[x] for x in range(k + 1, len(arr))):
+            return k
+    return -1
+
+
+# 16._ A Narcissistic Number is a positive number which is the sum of its own digits, each raised to the power of the
+# number of digits in a given base. Your code must return true or false depending upon whether the given number is a
+# Narcissistic number in base 10.
+
+def get_digits(n):
+    if n < 10:
+        return [n]
+    digits = []
+    while n > 0:
+        digits.append(n % 10)
+        n = n // 10
+    return digits
+
+
+def narcissistic(value):
+    digits = get_digits(value)
+    n = len(digits)
+    return value == sum(x ** n for x in digits)
+
+
+something = {}
